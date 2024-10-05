@@ -40,8 +40,13 @@ import StyleClass from 'primevue/styleclass';
 import Breadcrumb from '@/components/BreadcrumbApp.vue'
 import ColumnGroup from 'primevue/columngroup';   // optional
 import Row from 'primevue/row';
+import { OhVueIcon, addIcons } from "oh-vue-icons";
 
+import { FaFlag, RiZhihuFill, MdFacebook,HiHome , BiTwitter, FaWordpress, HiSolidChartPie ,BiCalculator , BiFileEarmarkExcel ,HiPresentationChartBar , HiDocumentReport ,FaUsers,FaHome     } from "oh-vue-icons/icons";
 
+addIcons(FaFlag, RiZhihuFill, MdFacebook,HiHome , BiTwitter, FaWordpress, HiSolidChartPie, BiCalculator,  BiFileEarmarkExcel ,HiPresentationChartBar ,HiDocumentReport ,FaUsers, FaHome   );
+
+app.component('v-icon', OhVueIcon)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
@@ -68,6 +73,8 @@ app.component('Column', Column)
 app.component('Breadcrumb', Breadcrumb)
 app.component('Row', Row)
 app.component('ColumnGroup', ColumnGroup)
+
+app.component("v-icon", OhVueIcon)
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);

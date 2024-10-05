@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useAuthStore } from '@/stores/Auth';
 import sidebarItem from './SideBarItem.ts'
+
 // pinia
 const authStore = useAuthStore();
 let itemSidebar : any = ref([])
@@ -10,7 +11,81 @@ let itemSidebar : any = ref([])
 onMounted(() => {
     initFlowbite();
     console.log('sidebarItem', sidebarItem)
-    itemSidebar.value =JSON.parse(localStorage.getItem('permissions') )
+    let objPermissionsUser: any = [
+        {
+          "title": "General",
+          "icon": "hi-home",
+          "to": '/dashboard',
+          "show": true,
+          "hability": [{
+            "view": true,
+            "create": true,
+            "edit": true,
+            "delete": true,
+          }]
+        },
+        {
+          "title": "Calculos",
+          "icon": "hi-presentation-chart-bar",
+          "to": "/calculations",
+          "show": true,
+          "hability": [{
+            "view": true,
+            "create": true,
+            "edit": true,
+            "delete": true,
+          }]
+        },
+        {
+          "title": "Comisiones",
+          "icon": "bi-calculator",
+          "to": "/commissions",
+          "show": true,
+          "hability": [{
+            "view": true,
+            "create": true,
+            "edit": true,
+            "delete": true,
+          }]
+        },
+        {
+          "title": "Importar",
+          "icon": "bi-file-earmark-excel",
+          "to": "/spareParts",
+          "show": true,
+          "hability": [{
+            "view": true,
+            "create": true,
+            "edit": true,
+            "delete": true,
+          }]
+        },
+        {
+          "title":"Reportes",
+          "icon": "hi-document-report",
+          "to": "/reports",
+          "show": true,
+          "hability": [{
+            "view": true,
+            "create": true,
+            "edit": true,
+            "delete": true,
+          }]
+        },
+        {
+          "title": "Usuarios",
+          "icon": "fa-users",
+          "to": "/usuarios",
+          "show": true,
+          "hability": [{
+            "view": true,
+            "create": true,
+            "edit": true,
+            "delete": true,
+          }]
+        },
+      ]
+    itemSidebar.value =objPermissionsUser
 
     console.log('sidebarItem', itemSidebar)
 })
@@ -35,9 +110,7 @@ function getIcon(icon){
                 <div v-for="itemI in itemSidebar" :key="itemI.title">
                     <li  v-if="itemI.show">
                     <RouterLink :to="itemI.to" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <i  :class="getIcon(itemI.icon)" />
-                        
-                        <img :src="itemI.icon" alt="" width="20" height="20">
+                        <v-icon :name="itemI.icon"  scale="1.5"/>
                         <span class="ms-3" icon="{{ itemI.icon }}">{{ itemI.title }}</span>
                     </RouterLink>
                 </li>

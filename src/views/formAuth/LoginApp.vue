@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/Auth';
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useLocalStorage } from "@vueuse/core";
-
+import router from '@/router';
 const username = ref<string>('');
 const password = ref<string>('');
 const remenberMe = ref<boolean>(false);
@@ -57,7 +57,8 @@ const handleLogin = async () => {
     useLocalStorageAuthentication();
     authStore.clearError(); // Limpiar errores anteriores
     try {
-      await authStore.login({ Email: username.value, Password: password.value });
+      router.push('/dashboard')
+      await authStore.login2({ Email: username.value, Password: password.value });
     } catch (error) {
       console.log('error');
     }

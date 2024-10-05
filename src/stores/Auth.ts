@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async login(username: string, password: string) {
-
+      router.push('/dashboard');
       let objPermissionsUser: any = [
         {
           "title": "General",
@@ -163,7 +163,7 @@ export const useAuthStore = defineStore('auth', {
           // router.push('/dashboard');
 
 
-
+          router.push('/dashboard');
           console.log('err', err)
         })
       // update pinia state
