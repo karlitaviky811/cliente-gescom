@@ -13,8 +13,8 @@ import DatePicker from 'primevue/datepicker';
 const searchTable = ref('');
 const breadcrumbOption = ref([
     {
-        router: '/usuarios/',
-        title: 'Listado de calculos',
+        router: '/calculations/',
+        title: 'Listado de comisiones',
         disabledOption: false
     },
     {
@@ -37,7 +37,8 @@ const schema: yup.Schema<any> = yup.object({
     servicesProvider: yup.object().required('Los servicios son requeridos'),
     branches: yup.object().required('La sucursal es requerida'),
     paramscalculate: yup.object().required('Los parametros de calculo son obligatorios'),
-    date: yup.date().required('Los parametros de calculo son obligatorios')
+    date: yup.date().required('Los parametros de calculo son obligatorios'),
+    category: yup.string().required('La catergoría es obligatorio')
 });
 
 const typeU: any = ref([
@@ -48,6 +49,19 @@ const typeU: any = ref([
     },
 ])
 
+
+const categories: any = ref([
+    {
+        id: 0,
+        name: 'Categoría I',
+        title: 'Categoría I'
+    },
+    {
+        id: 1,
+        name: 'Categoría II',
+        title: 'Categoría II'
+    },
+])
 
 const groupedCities = ref([
     {
@@ -93,18 +107,6 @@ const sucursales = ref([
         label: 'Sucursales',
         code: 'VEN',
         items: [
-            { label: 'Sucursal Punto Fijo', value: 'Ventas' },
-            { label: 'Agencia Valencia', value: 'Días laborados' },
-            { label: 'Sucursal Bello Monte', value: 'Presupuestos' },
-            { label: 'Sucursal Boleita', value: 'Cumplimiento' },
-            { label: 'Sucursal Barquisimeto', value: 'Pool de Ventas' },
-            { label: 'Sucursal Maracay', value: 'Cumplimiento' },
-            { label: 'Sucursal Carrizal', value: 'Pool de Ventas' },
-            { label: 'Sucursal Lechería', value: 'Pool de Ventas' },
-            { label: 'Sucursal Puerto Ordaz', value: 'Cumplimiento' },
-            { label: 'Agencia San Diego', value: 'Pool de Ventas' },
-            { label: 'Agencia Centro Valencia', value: 'Pool de Ventas' },
-            { label: 'Sucursal El Paraiso', value: 'Cumplimiento' },
         ]
 
     },
@@ -122,37 +124,10 @@ let { value: paramscalculate } = reactive(useField<any>('paramscalculate'))
 let { value: branches } = reactive(useField<any>('branches'))
 
 let { value: date } = reactive(useField<any>('date'))
-const cargos = ref([{
-    id: 0,
-    name: 'Asesor'
-},
-{
-    id: 1,
-    name: 'Especialista'
-}, {
-    id: 2,
-    name: 'Gerente de Ventas'
-}, {
-    id: 3,
-    name: 'Activador Comercial'
-}, {
-    id: 4,
-    name: 'Gerente Region'
-},
-{
-    id: 5,
-    name: 'Gerente Nacional Ventas'
-},
-{
-    id: 6,
-    name: 'Gerente Tiendas'
-},
-{
-    id: 7,
-    name: 'Instructor Shake'
-}
+let { value : category} = reactive(useField<any>('category'))
 
-])
+
+const cargos = ref();
 
 const origins = ref([
     'Ventas',
@@ -178,9 +153,46 @@ const configurations = ref([{
 },
 ])
 
-onMounted(() => {
+onMounted(async() => {
     initFlowbite();
 
+
+    const baseUrl = `${import.meta.env.VITE_API_URL}/`;
+    console.log('heeeerre')
+
+    await fetch(`${baseUrl}api/cargoySucursal/masterCargo`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }).then((response) => {
+
+        response.json().then((data) => {
+            console.log('sucursal', data.cargos)
+
+            //dataUsers.value = data.tikets
+            cargos.value = data.cargos[0]
+            console.log('dataUsers', data.cargos)
+        });
+    })
+
+    await fetch(`${baseUrl}api/cargoySucursal/masterSucursal`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    }).then((response) => {
+
+        response.json().then((data) => {
+            console.log('response', data.sucursal[0])
+
+            //dataUsers.value = data.tikets
+            sucursales.value[0].items = data.sucursal[0]
+            console.log('dataUsers', cargos.value)
+        });
+    })
     const tableElement = searchTable.value;
     if (tableElement) {
         new DataTable(tableElement, {
@@ -259,11 +271,23 @@ async function submit(values: any) {
                             </label>
                             <Field name="role" as="select" v-model="role" placeholder="Seleccione el tipo de servicio"
                                 class="w-full rounded-lg border-[1px]  border-[#dee2e6] border-stroke text-black border-stroke bg-transparent py-3 px-5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
-                                <option v-for="rol in cargos" :key="rol.name" :value="rol.name" class="w-full">
-                                    {{ rol.name }}
+                                <option v-for="rol in cargos" :key="rol.Nombre_cargo" :value="rol.ID_Cargo" class="w-full">
+                                    {{ rol.Nombre_cargo }}
                                 </option>
                             </Field>
                             <ErrorMessage name="role" class="text-[#c82a08] text-sm" />
+                        </div>
+                        <div class="relative z-0 w-full mb-2 group">
+                            <label for="phone" class="mb-3 block text-base font-medium text-[#07074D]">
+                                Categoría <span>*</span>
+                            </label>
+                            <Field name="category" as="select" v-model="category" placeholder="Seleccione el tipo de servicio"
+                                class="w-full rounded-lg border-[1px]  border-[#dee2e6] border-stroke text-black border-stroke bg-transparent py-3 px-5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
+                                <option v-for="rol in categories" :key="rol.name" :value="rol.name" class="w-full">
+                                    {{ rol.name }}
+                                </option>
+                            </Field>
+                            <ErrorMessage name="category" class="text-[#c82a08] text-sm" />
                         </div>
                         <div class="relative z-0 w-full mb-2 group">
                             <label for="phone" class="mb-3 block text-base font-medium text-[#07074D]">
@@ -300,8 +324,8 @@ async function submit(values: any) {
                                 Sucursales <span>*</span>
                             </label>
                             <Field name="branches" v-slot="{ field }">
-                                <MultiSelect v-model="branches" v-bind="field" :options="sucursales" optionLabel="label"
-                                    filter optionGroupLabel="label" optionGroupChildren="items" display="chip"
+                                <MultiSelect v-model="branches" v-bind="field" :options="sucursales" optionLabel="Sucursal"
+                                    filter optionGroupLabel="Sucursal" optionGroupChildren="items" display="chip"
                                     placeholder="Seleccionar servicios" class="w-full md:w-80">
                                     <template #optiongroup="slotProps">
                                         <div class="flex items-center">
@@ -309,7 +333,7 @@ async function submit(values: any) {
                                                 src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
                                                 :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`"
                                                 style="width: 18px" />
-                                            <div>{{ slotProps.option.label }}</div>
+                                            <div>{{ slotProps.option.Sucursal }}</div>
                                         </div>
                                     </template>
                                 </MultiSelect>

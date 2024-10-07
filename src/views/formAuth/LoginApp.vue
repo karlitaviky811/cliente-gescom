@@ -58,7 +58,7 @@ const handleLogin = async () => {
     authStore.clearError(); // Limpiar errores anteriores
     try {
       router.push('/dashboard')
-      await authStore.login2({ Email: username.value, Password: password.value });
+      await authStore.login( username.value, password.value);
     } catch (error) {
       console.log('error');
     }

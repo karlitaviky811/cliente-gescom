@@ -24,12 +24,6 @@ const sidebarItem: any[] = [
         show: true
     },
     {
-        title: 'Comisiones',
-        icon: 'src/assets/icons/repuestos.svg',
-        to: '/commissions',
-        show: true,
-    },
-    {
         title: 'Reportes',
         icon: 'src/assets/icons/reports.svg',
         to: '/reports',

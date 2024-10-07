@@ -170,7 +170,7 @@ import Breadcrumb from '@/components/BreadcrumbApp.vue'
 const breadcrumbOption = ref([
     {
         router: '/reports',
-        title: 'Listado de tickets',
+        title: 'Listado de reportes',
         disabledOption: false
     },
 ]);
@@ -189,7 +189,7 @@ onMounted(async () => {
             console.log('response', data.tikets)
 
             //dataUsers.value = data.tikets
-            products.value = data.tikets
+            //products.value = data.tikets
             console.log('dataUsers', dataUsers.value.length)
         });
     })

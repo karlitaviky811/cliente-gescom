@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { initFlowbite } from 'flowbite'
 import { useAuthStore } from '@/stores/Auth';
-import sidebarItem from './SideBarItem.ts'
+//import sidebarItem from './SideBarItem.ts'
 
 // pinia
 const authStore = useAuthStore();
@@ -10,7 +10,7 @@ let itemSidebar : any = ref([])
 // inicializar libreria flowBite 
 onMounted(() => {
     initFlowbite();
-    console.log('sidebarItem', sidebarItem)
+    console.log('sidebarItem')
     let objPermissionsUser: any = [
         {
           "title": "General",
@@ -25,7 +25,7 @@ onMounted(() => {
           }]
         },
         {
-          "title": "Calculos",
+          "title": "Comisiones",
           "icon": "hi-presentation-chart-bar",
           "to": "/calculations",
           "show": true,
@@ -36,22 +36,11 @@ onMounted(() => {
             "delete": true,
           }]
         },
-        {
-          "title": "Comisiones",
-          "icon": "bi-calculator",
-          "to": "/commissions",
-          "show": true,
-          "hability": [{
-            "view": true,
-            "create": true,
-            "edit": true,
-            "delete": true,
-          }]
-        },
+
         {
           "title": "Importar",
           "icon": "bi-file-earmark-excel",
-          "to": "/spareParts",
+          "to": "/imports",
           "show": true,
           "hability": [{
             "view": true,
@@ -96,7 +85,7 @@ const handleLogout = () => {
   
 };
 
-function getIcon(icon){
+function getIcon(icon :any){
     console.log('icon', icon)
     return icon
 }

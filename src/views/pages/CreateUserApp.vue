@@ -26,10 +26,7 @@ const schema: yup.Schema<any> = yup.object({
     name: yup.string().required('Nombre es requerido'),
     email: yup.string().required('Email es requerido').email('Email con formato inválido'),
     role: yup.string().required('Rol es requerido'),
-    identification: yup.string().required('Cédula es requerido'),
-    phone: yup.string().required('Teléfono es requerido').matches(/^[0-9-]{7,}$/, 'Formato es inválido'),
     password: yup.string().required('Password es requerido').min(8, 'Password debe tener al menos 8 caracteres'),
-    address: yup.string().required('Nombre es requerido'),
 });
 const form = ref(null)
 const typeU: any = ref([
@@ -52,11 +49,8 @@ const typeU: any = ref([
 
 let { value: name } = reactive(useField<any>('name'));;
 let { value: email } = reactive(useField<any>('email'));;
-let { value: phone } = reactive(useField<any>('phone'));;
 let { value: password } = reactive(useField<any>('password'));
-let { value: address } = reactive(useField<any>('address'))
 let { value: role } = reactive(useField<any>('role'))
-let { value: identification } = reactive(useField<any>('identification'))
 const typeServiceSelected = ref('')
 onMounted(() => {
     initFlowbite();

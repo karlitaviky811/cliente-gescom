@@ -54,7 +54,7 @@ export const useAuthStore = defineStore('auth', {
           }]
         },
         {
-          "title": "Calculos",
+          "title": "Comisiones",
           "icon": "src/assets/icons/calendar.svg",
           "to": "/calculations",
           "show": true,
@@ -66,21 +66,9 @@ export const useAuthStore = defineStore('auth', {
           }]
         },
         {
-          "title": "Comisiones",
-          "icon": "src/assets/icons/ticket.svg",
-          "to": "/commissions",
-          "show": true,
-          "hability": [{
-            "view": true,
-            "create": true,
-            "edit": true,
-            "delete": true,
-          }]
-        },
-        {
           "title": "Importar",
           "icon": "src/assets/icons/repuestos.svg",
-          "to": "/spareParts",
+          "to": "/imports",
           "show": true,
           "hability": [{
             "view": true,
@@ -90,7 +78,7 @@ export const useAuthStore = defineStore('auth', {
           }]
         },
         {
-          "title":"Reportes",
+          "title": "Reportes",
           "icon": "src/assets/icons/reports.svg",
           "to": "/reports",
           "show": true,
@@ -117,40 +105,39 @@ export const useAuthStore = defineStore('auth', {
       const res = await fetch(`${baseUrl}api/auth/login`, {
         method: "POST",
         body: JSON.stringify({
-          "Email": 'admin@admin.com',
-          "Password": '123',
+          "Email": username,
+          "Password": password,
         }),
         headers: {
           "Content-Type": "application/json",
         },
       })
-        .then((response) => {
-
-          response.json().then(async (data) => {
-            this.user = data
-            let permission = data.Permissions
-            //permission = permission.replace(/'/g, '"');
-           // let aux = JSON.parse(permission)
-            //localStorage.setItem('user', JSON.stringify(data))
-
-           /* let array = permission.map((item : any)=>JSON.stringify(item))
-            console.log('data',array)
-            */
-            localStorage.setItem('user', JSON.stringify(data))
-            let newSidebar: any = sidebarItem.map(sidebar => {
-              objPermissionsUser.map((item: any) => {
-                console.log('hiiii', sidebar.title == item.name)
-                if (sidebar.title == item.name) {
-                  sidebar.show = item.show
-                }
-
-              })
-              localStorage.setItem('permissions', JSON.stringify(objPermissionsUser));
-
-
+        .then((response: any) => {
+          if(response.status !== 409){
+            response.json().then(async (data: any) => {
+              this.user = data
+              let permission = data.Permissions
+              if (data.error !== 'El usuario no existe.') {
+                router.push('/dashboard');
+                localStorage.setItem('user', JSON.stringify(data))
+                let newSidebar: any = sidebarItem.map(sidebar => {
+                  objPermissionsUser.map((item: any) => {
+                    if (sidebar.title == item.name) {
+                      sidebar.show = item.show
+                    }
+  
+                  })
+                  localStorage.setItem('permissions', JSON.stringify(objPermissionsUser));
+  
+  
+                })
+              }
+  
+  
             })
-            router.push('/dashboard');
-          })
+          }
+         
+
 
 
 
@@ -163,7 +150,7 @@ export const useAuthStore = defineStore('auth', {
           // router.push('/dashboard');
 
 
-          router.push('/dashboard');
+
           console.log('err', err)
         })
       // update pinia state

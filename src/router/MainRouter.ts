@@ -96,6 +96,11 @@ const MainRoutes = {
       ],
     },
     {
+      path: "/imports",
+      name: "Importar",
+      component: () => import("@/views/pages/ImportFilesApp.vue"),
+    },
+    {
       path: "/calendar",
       name: "Calendario",
       component: () => import("@/views/pages/CalendarTicketsApp.vue"),

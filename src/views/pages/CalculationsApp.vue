@@ -1,6 +1,6 @@
 <template>
     <Breadcrumb :data="breadcrumbOption" />
-    <h3 class="text-3xl font-bold mt-5 dark:text-white">Maestro de Calculos </h3>
+    <h3 class="text-3xl font-bold mt-5 dark:text-white">Maestro de Comisiones </h3>
     <div class="flex justify-end m-2">
         <Button label="Nuevo calculo" icon="pi pi-plus" severity="success" class="mr-2" @click="openNew" />
     </div>
